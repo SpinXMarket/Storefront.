@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>
+  // Secure SpinX backend URL. Leave blank until the API is deployed.
+  window.SPINX_API_URL = "";
+</script>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SpinX Store</title>
+<meta name="description" content="SpinX BlockSpin marketplace. Browse cash, accounts, and bundles.">
+<style>
+:root{--bg:#09090d;--panel:#111119;--panel2:#171722;--purple:#8b5cf6;--purple2:#a78bfa;--gold:#f5c542;--text:#f7f7fb;--muted:#a5a5b5;--line:#292938;--danger:#ef4444}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at 50% -10%,#241642 0,#09090d 42%);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+a{color:inherit;text-decoration:none}button,input,select{font:inherit}
+.container{width:min(1160px,92%);margin:auto}.nav{position:sticky;top:0;z-index:20;background:rgba(9,9,13,.8);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,.06)}
+.nav-inner{height:72px;display:flex;align-items:center;justify-content:space-between}.brand{font-weight:900;font-size:27px;letter-spacing:-1px}.brand span{color:var(--purple2)}.navlinks{display:flex;gap:24px;color:var(--muted);font-weight:600}.navlinks a:hover{color:#fff}
+.hero{padding:90px 0 55px;text-align:center}.badge{display:inline-flex;gap:8px;align-items:center;border:1px solid #3a2b5c;background:#15101f;color:#c4b5fd;border-radius:999px;padding:8px 14px;font-size:13px;font-weight:700}.hero h1{font-size:clamp(44px,7vw,76px);line-height:.98;margin:20px auto 18px;max-width:850px;letter-spacing:-4px}.hero h1 span{color:var(--purple2)}.hero p{max-width:650px;margin:0 auto;color:var(--muted);font-size:18px;line-height:1.6}.hero-actions{display:flex;justify-content:center;gap:12px;margin-top:30px;flex-wrap:wrap}
+.btn{border:0;border-radius:12px;padding:13px 19px;cursor:pointer;font-weight:800;transition:.2s}.btn:hover{transform:translateY(-2px)}.primary{background:var(--purple);color:#fff}.secondary{background:#191923;border:1px solid var(--line);color:#fff}.gold{background:var(--gold);color:#111}
+.section{padding:42px 0}.section-head{display:flex;align-items:end;justify-content:space-between;gap:20px;margin-bottom:22px}.section h2{font-size:30px;margin:0;letter-spacing:-1px}.section-sub{color:var(--muted);margin-top:7px}
+.controls{display:grid;grid-template-columns:1fr 190px;gap:12px;margin-bottom:22px}.input,.select{width:100%;background:var(--panel);border:1px solid var(--line);color:#fff;padding:13px 15px;border-radius:12px;outline:none}.input:focus,.select:focus{border-color:var(--purple)}
+.filters{display:flex;gap:8px;overflow:auto;padding-bottom:6px;margin-bottom:18px}.filter{white-space:nowrap;background:var(--panel);border:1px solid var(--line);color:var(--muted);padding:10px 14px;border-radius:999px;cursor:pointer;font-weight:700}.filter.active,.filter:hover{background:#25183c;color:#fff;border-color:#5d3c91}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.card{background:linear-gradient(180deg,#151520,#101017);border:1px solid var(--line);border-radius:18px;overflow:hidden;transition:.25s;position:relative}.card:hover{transform:translateY(-5px);border-color:#594087;box-shadow:0 18px 45px rgba(0,0,0,.3)}.thumb{height:190px;background:linear-gradient(135deg,#22173a,#101018);display:flex;align-items:center;justify-content:center;overflow:hidden}.thumb img{width:100%;height:100%;object-fit:cover}.placeholder{font-size:48px;color:#c4b5fd}.card-body{padding:17px}.tag{display:inline-block;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.7px;color:#c4b5fd;background:#211632;padding:6px 8px;border-radius:7px}.card h3{margin:11px 0 7px;font-size:19px}.desc{color:var(--muted);font-size:14px;line-height:1.5;min-height:42px}.meta{display:flex;justify-content:space-between;align-items:center;margin:15px 0}.price{font-size:22px;font-weight:900}.stock{font-size:12px;font-weight:800}.in{color:#4ade80}.out{color:#f87171}.card-actions{display:flex;gap:8px}.card-actions .btn{flex:1;padding:11px 10px;font-size:13px}.featured{position:absolute;top:12px;left:12px;background:var(--gold);color:#111;padding:6px 9px;border-radius:8px;font-size:11px;font-weight:900}
+.empty{grid-column:1/-1;text-align:center;padding:55px 20px;background:var(--panel);border:1px dashed var(--line);border-radius:18px;color:var(--muted)}
+.features{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}.feature{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:22px}.feature b{display:block;margin:9px 0 6px}.feature p{color:var(--muted);font-size:14px;line-height:1.5;margin:0}
+.reviews{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}.review{background:var(--panel);border:1px solid var(--line);padding:20px;border-radius:16px}.stars{color:var(--gold);letter-spacing:2px}.review p{color:#d3d3dd;line-height:1.55}.review small{color:var(--muted)}
+.faq{border-top:1px solid var(--line)}details{border-bottom:1px solid var(--line);padding:17px 0}summary{cursor:pointer;font-weight:800}details p{color:var(--muted);line-height:1.6}
+.footer{border-top:1px solid var(--line);margin-top:40px;padding:35px 0;color:var(--muted);text-align:center}
+.modal-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:50;align-items:center;justify-content:center;padding:18px}.modal-backdrop.show{display:flex}.modal{width:min(570px,100%);background:#111119;border:1px solid #38384a;border-radius:20px;max-height:90vh;overflow:auto}.modal-top{padding:20px 22px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between}.close{background:none;border:0;color:#aaa;font-size:25px;cursor:pointer}.modal-content{padding:22px}.modal-img{height:210px;border-radius:13px;overflow:hidden;background:#1a1428;margin-bottom:17px}.modal-img img{width:100%;height:100%;object-fit:cover}.modal h2{margin:5px 0}.modal p{color:var(--muted);line-height:1.6}.features-list{display:flex;gap:7px;flex-wrap:wrap;margin:15px 0}.pill{border:1px solid var(--line);padding:7px 9px;border-radius:999px;color:#ccc;font-size:12px}
+@media(max-width:850px){.grid,.reviews,.features{grid-template-columns:repeat(2,1fr)}.navlinks{display:none}}@media(max-width:600px){.hero{padding-top:65px}.hero h1{letter-spacing:-2px}.controls{grid-template-columns:1fr}.grid,.reviews,.features{grid-template-columns:1fr}.section-head{display:block}.nav-inner{height:62px}}
+</style>
+<style>
+
+/* ===== SPINX MAXIMALIST VISUAL UPGRADE ===== */
+:root{
+  --sx-purple:#8b5cf6;
+  --sx-purple2:#a855f7;
+  --sx-gold:#f5c542;
+  --sx-white:#f8fafc;
+  --sx-gray:#a1a1aa;
+  --sx-dark:#07070b;
+}
+body{
+  background:
+    radial-gradient(circle at 8% 10%, rgba(139,92,246,.20), transparent 28%),
+    radial-gradient(circle at 92% 18%, rgba(245,197,66,.12), transparent 24%),
+    radial-gradient(circle at 45% 90%, rgba(168,85,247,.13), transparent 30%),
+    linear-gradient(135deg,#050507 0%,#0b0912 45%,#050507 100%);
+  overflow-x:hidden;
+}
+body::before{
+  content:"";
+  position:fixed; inset:0; pointer-events:none; z-index:-1;
+  opacity:.16;
+  background-image:
+    radial-gradient(circle, rgba(255,255,255,.7) 1px, transparent 1px),
+    radial-gradient(circle, rgba(139,92,246,.6) 1px, transparent 1px);
+  background-size:34px 34px, 57px 57px;
+  background-position:0 0, 17px 19px;
+}
+.navbar,.nav,.header{
+  backdrop-filter:blur(18px);
+  background:rgba(7,7,11,.78)!important;
+  border-bottom:1px solid rgba(139,92,246,.28)!important;
+  box-shadow:0 10px 40px rgba(0,0,0,.35);
+}
+.hero{
+  position:relative;
+  isolation:isolate;
+  border:1px solid rgba(139,92,246,.28);
+  border-radius:28px;
+  margin:28px auto;
+  max-width:1400px;
+  overflow:hidden;
+  box-shadow:0 0 80px rgba(139,92,246,.15), inset 0 0 70px rgba(255,255,255,.025);
+}
+.hero::before,.hero::after{
+  content:"";
+  position:absolute; border-radius:50%; filter:blur(3px); z-index:-1;
+}
+.hero::before{
+  width:420px;height:420px;right:-140px;top:-170px;
+  background:radial-gradient(circle,rgba(139,92,246,.45),transparent 68%);
+}
+.hero::after{
+  width:300px;height:300px;left:-120px;bottom:-150px;
+  background:radial-gradient(circle,rgba(245,197,66,.20),transparent 68%);
+}
+.hero h1{
+  text-shadow:0 0 22px rgba(139,92,246,.65),0 0 55px rgba(139,92,246,.22);
+}
+.hero h1 span,.gradient-text{
+  background:linear-gradient(90deg,#fff 0%,#c4b5fd 40%,#f5c542 75%,#fff 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.btn-primary{
+  background:linear-gradient(135deg,var(--sx-purple),#6d28d9)!important;
+  border:1px solid rgba(255,255,255,.22)!important;
+  box-shadow:0 0 24px rgba(139,92,246,.42), inset 0 1px rgba(255,255,255,.18);
+}
+.btn-primary:hover{
+  transform:translateY(-3px) scale(1.02);
+  box-shadow:0 0 38px rgba(139,92,246,.68),0 12px 35px rgba(0,0,0,.35);
+}
+.product-card,.card,.review-card,.faq-item{
+  position:relative;
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.10)!important;
+  background:linear-gradient(145deg,rgba(20,17,29,.94),rgba(9,9,13,.94))!important;
+  box-shadow:0 18px 55px rgba(0,0,0,.32), inset 0 1px rgba(255,255,255,.05);
+  transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+}
+.product-card::before,.card::before,.review-card::before{
+  content:"";
+  position:absolute;left:-30%;top:-80%;
+  width:160%;height:160%;
+  background:linear-gradient(120deg,transparent 38%,rgba(139,92,246,.10),transparent 62%);
+  transform:rotate(12deg);pointer-events:none;
+}
+.product-card:hover,.card:hover,.review-card:hover,.faq-item:hover{
+  transform:translateY(-8px);
+  border-color:rgba(139,92,246,.55)!important;
+  box-shadow:0 24px 70px rgba(0,0,0,.48),0 0 35px rgba(139,92,246,.16);
+}
+.product-card img{
+  filter:saturate(1.12) contrast(1.05);
+}
+.badge,.category,.tag{
+  border:1px solid rgba(139,92,246,.34)!important;
+  background:rgba(139,92,246,.12)!important;
+  box-shadow:0 0 18px rgba(139,92,246,.12);
+}
+.price{
+  color:var(--sx-gold)!important;
+  text-shadow:0 0 18px rgba(245,197,66,.25);
+}
+.section-title{
+  text-shadow:0 0 24px rgba(139,92,246,.25);
+}
+.section-title::after{
+  content:"";
+  display:block;
+  width:90px;height:3px;margin-top:12px;border-radius:99px;
+  background:linear-gradient(90deg,var(--sx-purple),var(--sx-gold),transparent);
+  box-shadow:0 0 16px rgba(139,92,246,.5);
+}
+select,input{
+  background:rgba(10,9,15,.88)!important;
+  border:1px solid rgba(139,92,246,.28)!important;
+}
+select:focus,input:focus{
+  outline:none;
+  border-color:var(--sx-purple)!important;
+  box-shadow:0 0 0 3px rgba(139,92,246,.12),0 0 22px rgba(139,92,246,.18);
+}
+footer{
+  border-top:1px solid rgba(139,92,246,.22)!important;
+  background:rgba(4,4,7,.82)!important;
+}
+@media (max-width:700px){
+  .hero{margin:14px 10px;border-radius:20px}
+  .product-card:hover,.card:hover,.review-card:hover{transform:translateY(-4px)}
+}
+
+</style>
+</head>
+<body>
+
+<div class="sx-orb sx-orb-a"></div>
+<div class="sx-orb sx-orb-b"></div>
+<div class="sx-sparkle sx-sparkle-a">✦</div>
+<div class="sx-sparkle sx-sparkle-b">✦</div>
+<style>
+.sx-orb{position:fixed;pointer-events:none;border-radius:50%;filter:blur(55px);z-index:-1}
+.sx-orb-a{width:220px;height:220px;left:-100px;top:38%;background:rgba(139,92,246,.16)}
+.sx-orb-b{width:180px;height:180px;right:-70px;top:68%;background:rgba(245,197,66,.10)}
+.sx-sparkle{position:fixed;pointer-events:none;color:rgba(245,197,66,.38);font-size:24px;z-index:-1;text-shadow:0 0 20px rgba(245,197,66,.5);animation:sxfloat 5s ease-in-out infinite}
+.sx-sparkle-a{left:5%;top:28%}.sx-sparkle-b{right:7%;top:52%;animation-delay:1.7s}
+@keyframes sxfloat{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-14px) rotate(12deg)}}
+</style>
+
+<nav class="nav"><div class="container nav-inner">
+<a class="brand" href="#"><span>Spin</span>X</a>
+<div class="navlinks"><a href="#products">Products</a><a href="#reviews">Reviews</a><a href="#faq">FAQ</a></div>
+<a class="btn primary" href="https://discord.com/" target="_blank" rel="noopener">Join Discord</a>
+</div></nav>
+
+<header class="hero"><div class="container">
+<div class="badge">🟣 SPINX MARKETPLACE</div>
+<h1>Power up your <span>BlockSpin</span> experience.</h1>
+<p>Browse SpinX products, compare options, and find what you're looking for. Checkout integration can be connected after the catalog is ready.</p>
+<div class="hero-actions"><a class="btn primary" href="#products">🛒 Browse Products</a><a class="btn secondary" href="#reviews">⭐ Customer Reviews</a></div>
+</div></header>
+
+<main>
+<section class="section" id="products"><div class="container">
+<div class="section-head"><div><h2>Shop SpinX</h2><div class="section-sub">Browse cash, accounts, and bundles.</div></div></div>
+<div class="controls"><input id="search" class="input" placeholder="🔎 Search products..."><select id="sort" class="select"><option value="featured">Featured</option><option value="low">Price: Low to High</option><option value="high">Price: High to Low</option><option value="az">Name: A-Z</option></select></div>
+<div id="filters" class="filters"></div><div id="grid" class="grid"></div>
+</div></section>
+
+<section class="section"><div class="container"><div class="section-head"><div><h2>Why SpinX?</h2><div class="section-sub">A simple, customer-friendly storefront.</div></div></div>
+<div class="features"><div class="feature">🛡️<b>Clear Listings</b><p>See product details, prices, categories, and availability before choosing.</p></div><div class="feature">⚡<b>Easy Browsing</b><p>Search, filter, sort, and open product details without leaving the store.</p></div><div class="feature">💬<b>Discord Support</b><p>Connect with the SpinX community and get support through Discord.</p></div></div>
+</div></section>
+
+<section class="section" id="reviews"><div class="container"><div class="section-head"><div><h2>⭐ Customer Reviews</h2><div class="section-sub">What customers are saying.</div></div></div>
+<div class="reviews"><div class="review"><div class="stars">★★★★★</div><p>Fast service and an easy buying experience.</p><small>SpinX Customer</small></div><div class="review"><div class="stars">★★★★★</div><p>Clean store and straightforward product information.</p><small>SpinX Customer</small></div><div class="review"><div class="stars">★★★★★</div><p>Support was helpful and the process was simple.</p><small>SpinX Customer</small></div></div>
+</div></section>
+
+<section class="section" id="faq"><div class="container"><div class="section-head"><div><h2>FAQ</h2><div class="section-sub">Common questions.</div></div></div>
+<div class="faq"><details><summary>How do I purchase a product?</summary><p>Choose a product and use its Buy Now button. Checkout will be connected in the next stage.</p></details><details><summary>How do I get support?</summary><p>Use the Discord button at the top of the store to reach the SpinX community.</p></details><details><summary>What does Out of Stock mean?</summary><p>That product is currently unavailable. Its Buy Now button is disabled until its stock status is changed.</p></details></div>
+</div></section>
+</main>
+<footer class="footer"><div class="container">© 2026 SpinX • BlockSpin Marketplace</div></footer>
+
+<div id="modalBg" class="modal-backdrop"><div class="modal"><div class="modal-top"><strong>Product Details</strong><button class="close" id="close">×</button></div><div class="modal-content" id="modalContent"></div></div></div>
+
+<script>
+const products=[
+{id:"cash1m",name:"1M BlockSpin Cash",category:"BlockSpin Cash",description:"1,000,000 in-game BlockSpin cash.",price:10,status:"In Stock",featured:true,image:"",features:["1M Cash","Fast Delivery","Secure Purchase"]},
+{id:"anaconda",name:"Anaconda Account",category:"Accounts",description:"BlockSpin account containing the Anaconda rare weapon.",price:25,status:"In Stock",featured:false,image:"",features:["Anaconda","Fast Delivery","Secure Purchase"]},
+{id:"anaconda100k",name:"Anaconda + 100K Account",category:"Accounts",description:"BlockSpin account containing the Anaconda rare weapon and 100K cash.",price:20,status:"In Stock",featured:false,image:"",features:["Anaconda","100K Cash","Fast Delivery"]},
+{id:"rpg6",name:"6 RPG Account",category:"Accounts",description:"BlockSpin account containing 6 RPGs.",price:30,status:"In Stock",featured:true,image:"",features:["6 RPGs Included","Fast Delivery","Secure Purchase"]},
+{id:"starter",name:"Starter Bundle",category:"Bundles & Deals",description:"A discounted BlockSpin starter bundle.",price:15,status:"In Stock",featured:false,image:"",features:["Bundle Deal","Fast Delivery","Secure Purchase"]}
+];
+let category="All", query="";
+const $=s=>document.querySelector(s);
+function money(n){return "$"+Number(n).toFixed(2)}
+function cats(){const cs=["All",...new Set(products.map(p=>p.category))];$("#filters").innerHTML=cs.map(c=>`<button class="filter ${c===category?"active":""}" data-cat="${c}">${c}</button>`).join("");document.querySelectorAll("[data-cat]").forEach(b=>b.onclick=()=>{category=b.dataset.cat;cats();render()})}
+function filtered(){let arr=products.filter(p=>(category==="All"||p.category===category)&&(p.name+" "+p.description).toLowerCase().includes(query.toLowerCase()));const s=$("#sort").value;if(s==="low")arr.sort((a,b)=>a.price-b.price);if(s==="high")arr.sort((a,b)=>b.price-a.price);if(s==="az")arr.sort((a,b)=>a.name.localeCompare(b.name));if(s==="featured")arr.sort((a,b)=>Number(b.featured)-Number(a.featured));return arr}
+function card(p){const disabled=p.status!=="In Stock";return `<article class="card">${p.featured?'<div class="featured">FEATURED</div>':''}<div class="thumb">${p.image?`<img src="${p.image}" alt="${p.name}">`:'<div class="placeholder">✦</div>'}</div><div class="card-body"><span class="tag">${p.category}</span><h3>${p.name}</h3><div class="desc">${p.description}</div><div class="meta"><span class="price">${money(p.price)}</span><span class="stock ${disabled?"out":"in"}">${p.status}</span></div><div class="card-actions"><button class="btn secondary" onclick="openProduct('${p.id}')">View Product</button><button class="btn ${disabled?"secondary":"primary"}" ${disabled?"disabled":""} onclick="buy('${p.id}')">Buy Now</button></div></div></article>`}
+function render(){const arr=filtered();$("#grid").innerHTML=arr.length?arr.map(card).join(""):'<div class="empty">No products found. Try another search or category.</div>'}
+function openProduct(id){const p=products.find(x=>x.id===id);$("#modalContent").innerHTML=`<div class="modal-img">${p.image?`<img src="${p.image}" alt="${p.name}">`:'<div class="placeholder">✦</div>'}</div><span class="tag">${p.category}</span><h2>${p.name}</h2><p>${p.description}</p><div class="features-list">${p.features.map(f=>`<span class="pill">${f}</span>`).join("")}</div><div class="meta"><span class="price">${money(p.price)}</span><span class="stock ${p.status==="In Stock"?"in":"out"}">${p.status}</span></div><button class="btn primary" style="width:100%" ${p.status!=="In Stock"?"disabled":""} onclick="buy('${p.id}')">🛒 Buy Now</button>`;$("#modalBg").classList.add("show")}
+function buy(id){const p=products.find(x=>x.id===id);alert(`Checkout is not connected yet.\n\nSelected: ${p.name}\nPrice: ${money(p.price)}\n\nYour next step will be connecting this button to your SpinX checkout.`)}
+$("#close").onclick=()=>$("#modalBg").classList.remove("show");$("#modalBg").onclick=e=>{if(e.target.id==="modalBg")$("#modalBg").classList.remove("show")};
+$("#search").oninput=e=>{query=e.target.value;render()};$("#sort").onchange=render;cats();render();
+</script>
+
+<!-- SpinX v2 checkout + live Discord review integration -->
+<div id="checkoutModal" class="modal" aria-hidden="true">
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeCheckout()" aria-label="Close">×</button>
+    <div class="modal-body">
+      <span class="eyebrow">SPINX CHECKOUT</span>
+      <h2 id="checkoutProductName">Product</h2>
+      <p id="checkoutProductMeta"></p>
+      <form id="checkoutForm">
+        <label>Discord Username
+          <input id="discordUsername" placeholder="@username" required>
+        </label>
+        <label>Payment Method
+          <select id="paymentMethod" required>
+            <option value="">Select payment method</option>
+            <option>Cash App</option>
+            <option>PayPal</option>
+          </select>
+        </label>
+        <button class="btn btn-primary" type="submit">Place Order</button>
+        <p id="checkoutStatus" class="form-status"></p>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  let selectedProduct = null;
+
+  window.openCheckout = function(product) {
+    selectedProduct = product;
+    document.getElementById('checkoutProductName').textContent = product.name;
+    document.getElementById('checkoutProductMeta').textContent =
+      '$' + Number(product.price).toFixed(2) + ' • ' + (product.status || 'In Stock');
+    document.getElementById('checkoutStatus').textContent = '';
+    const modal = document.getElementById('checkoutModal');
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
+  };
+
+  window.closeCheckout = function() {
+    const modal = document.getElementById('checkoutModal');
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden', 'true');
+  };
+
+  document.getElementById('checkoutForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const status = document.getElementById('checkoutStatus');
+    const payload = {
+      productId: selectedProduct.id,
+      productName: selectedProduct.name,
+      price: selectedProduct.price,
+      discordUsername: document.getElementById('discordUsername').value.trim(),
+      paymentMethod: document.getElementById('paymentMethod').value
+    };
+
+    if (!window.SPINX_API_URL) {
+      status.textContent = 'Checkout form is ready. The secure Discord connection still needs to be deployed.';
+      return;
+    }
+
+    status.textContent = 'Creating your order...';
+    try {
+      const response = await fetch(window.SPINX_API_URL.replace(/\/$/, '') + '/orders', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(payload)
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message || 'Order failed');
+      status.textContent = data.message || ('Order created: ' + data.orderId);
+      this.reset();
+    } catch (error) {
+      status.textContent = 'Could not create the order. Please try again or contact SpinX support.';
+    }
+  });
+})();
+</script>
+
+<script>
+async function loadSpinXReviews() {
+  const container = document.querySelector('[data-spinx-reviews]');
+  if (!container || !window.SPINX_API_URL) return;
+
+  try {
+    const response = await fetch(window.SPINX_API_URL.replace(/\/$/, '') + '/reviews');
+    if (!response.ok) throw new Error('reviews unavailable');
+    const reviews = await response.json();
+    container.innerHTML = '';
+
+    if (!reviews.length) {
+      container.innerHTML = '<p>No reviews yet. Be the first to leave one in ⭐︱reviews!</p>';
+      return;
+    }
+
+    reviews.slice(0, 12).forEach(review => {
+      const card = document.createElement('article');
+      card.className = 'review-card';
+      card.innerHTML = `
+        <div class="review-stars">${'★'.repeat(Math.max(1, Math.min(5, Number(review.rating) || 5)))}</div>
+        <h3>${escapeHtml(review.username || 'SpinX Customer')}</h3>
+        <p class="review-product">${escapeHtml(review.product || '')}</p>
+        <p>${escapeHtml(review.comment || '')}</p>
+      `;
+      container.appendChild(card);
+    });
+  } catch {}
+}
+
+function escapeHtml(value) {
+  return String(value).replace(/[&<>"']/g, c => ({
+    '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#039;'
+  }[c]));
+}
+window.addEventListener('DOMContentLoaded', loadSpinXReviews);
+</script>
+
+</body>
+</html>

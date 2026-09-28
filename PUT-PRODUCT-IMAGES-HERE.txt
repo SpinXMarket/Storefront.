@@ -1,0 +1,1 @@
+Put your SpinX product images in this folder, then use paths like images/product.png in the product catalog.

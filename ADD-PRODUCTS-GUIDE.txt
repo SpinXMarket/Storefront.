@@ -1,0 +1,28 @@
+SPINX — ADDING PRODUCTS
+
+The storefront now has a centralized product catalog.
+
+To add a product:
+1. Open spinx-store/index.html.
+2. Find "SPINX PRODUCT CATALOG — EASY EDIT AREA".
+3. Find `const products = [`.
+4. Copy an existing product object.
+5. Paste it before the closing `];`.
+6. Give it a unique `id`.
+7. Change the name, category, description, price, status, image, and features.
+8. Set `featured: true` if you want it featured.
+9. Save and upload the updated index.html.
+
+IMAGE:
+Put product images in:
+spinx-store/images/
+
+Then use:
+image: "images/your-image.png"
+
+The search, category filtering, sorting, product popup, and Buy Now checkout
+use the same product data automatically.
+
+Future upgrade:
+A real admin dashboard can be added so you can add/edit products from a
+web page instead of editing index.html manually.

@@ -1,0 +1,15 @@
+SpinX Maximalist visual update
+
+The storefront now has a more maximalist look:
+- layered purple/black/gold gradients
+- glowing accents
+- dotted background texture
+- glassy navigation
+- stronger product-card depth
+- purple/gold glow effects
+- hover lift animations
+- highlighted prices and section accents
+- decorative floating sparkles/orbs
+- mobile-safe responsive behavior
+
+The catalog, checkout integration, and Discord review integration remain in place.
